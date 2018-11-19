@@ -1,0 +1,9 @@
+APP_DOMAIN	0 /home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/APP_DOMAIN.0000000004          
+APP_DYN_SEV_IP_CB	1	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/APP_DYN_SEV_IP_CB.0000000004   
+APP_POLICY	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/APP_POLICY.0000000004          
+APP_STATIC_SEV_IP	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/APP_STATIC_SEV_IP.0000000004   
+LIMIT_DOMAIN	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/LIMIT_DOMAIN.0000000004        
+LIMIT_DYN_IP_CB	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/LIMIT_DYN_IP_CB.0000000004     
+PXY_DYN_SERV_IP	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/PXY_DYN_SERV_IP.0000000004     
+PXY_INTERCEPT_DOMAIN	0	/home/mesasoft/pangu_valve/conf/maat_cfg2/inc/2018-06-16/PXY_INTERCEPT_DOMAIN.0000000004
+
