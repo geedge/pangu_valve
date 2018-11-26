@@ -68,6 +68,7 @@ typedef struct __pgvavle_global_info
 	//MaatRedis//
 	char maat_table_info[MAX_PATH_LEN];
 	char redis_ip[64];
+	char effective_range[4096];
 	int redis_port;
 	int maat_source;
 

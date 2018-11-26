@@ -129,6 +129,7 @@ static int32_t read_conf_and_init(void)
 	//Maat//
 	MESA_load_profile_string_def(PANGU_CONF_FILE, "SYSTEM", "MAAT_TABLE_INFO_PATH", g_pgvalve_info.maat_table_info, sizeof(g_pgvalve_info.maat_table_info), "./conf/maat_table_info.conf");
 	MESA_load_profile_int_def(PANGU_CONF_FILE, "SYSTEM", "MAAT_CONFIG_RECV_WAY", &g_pgvalve_info.maat_source, MAAT_CONFIG_REDIS);
+	MESA_load_profile_string_def(PANGU_CONF_FILE, "SYSTEM", "MAAT_EFFECTIVE_RANGE", g_pgvalve_info.effective_range, 4096, "");
 
 	MESA_load_profile_uint_def(PANGU_CONF_FILE, "SYSTEM", "SERVICE_TOPLIMIT_SW", &g_pgvalve_info.service_limit_sw, 0);
 	if(MESA_load_profile_string_nodef(PANGU_CONF_FILE, "SYSTEM", "C3_AUTH_DATA", g_pgvalve_info.authdata, 128) < 0)

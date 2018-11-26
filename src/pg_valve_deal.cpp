@@ -42,6 +42,7 @@ const char*sscanf_error_string(SSCANF_ERROR_NO_t type)
 SSCANF_ERROR_NO_t fill_in_dsetid_did_limitid(const char *user_region, int64_t *did,int64_t *dsetid, int32_t *limit_rate)
 {
 	const char *pos;
+	float droprate;
 	
 	if(did!=NULL && NULL!=(pos = strcasestr(user_region, "DOMAIN_ID=")))
 	{
@@ -59,9 +60,14 @@ SSCANF_ERROR_NO_t fill_in_dsetid_did_limitid(const char *user_region, int64_t *d
 		}
 	}
 	
-	if(limit_rate!=NULL && NULL!=(pos = strcasestr(user_region, "RATE_LIMIT=")))
+	if(limit_rate!=NULL && NULL!=(pos = strcasestr(user_region, "Droprate=")))
 	{
-		if(sscanf(pos+strlen("RATE_LIMIT="), "%d", limit_rate) != 1)
+		if(sscanf(pos+strlen("Droprate="), "%f", &droprate) != 1)
+		{
+			return SSCANF_ERROR_LIMIT;
+		}
+		*limit_rate = (int)(droprate*100);
+		if(*limit_rate > 100)
 		{
 			return SSCANF_ERROR_LIMIT;
 		}

@@ -114,6 +114,10 @@ int MaatService::maat_feather_start(void)
 	ret |= Maat_set_feather_opt(feather, MAAT_OPT_PERF_ON, NULL, 0);
 
 	ret |= Maat_set_feather_opt(feather, MAAT_OPT_INSTANCE_NAME, table_relate->instance_name, strlen(table_relate->instance_name)+1);
+	if(strlen(g_pgvalve_info.effective_range)>0)
+	{
+		ret |= Maat_set_feather_opt(feather, MAAT_OPT_ACCEPT_TAGS, g_pgvalve_info.effective_range, strlen(g_pgvalve_info.effective_range)+1);
+	}
 	if(g_pgvalve_info.maat_source == MAAT_CONFIG_FILE)
 	{
 		ret |= Maat_set_feather_opt(feather, MAAT_OPT_FULL_CFG_DIR, table_relate->full_dir, strlen(table_relate->full_dir)+1);
