@@ -122,6 +122,7 @@ static int32_t read_conf_and_init(void)
 		assert(0);
 		return -1;
 	}
+	MESA_load_profile_string_def(PANGU_CONF_FILE, "SYSTEM", "CONSUL_WIREDCFG_APPNAME", g_pgvalve_info.wiredcfg_app, sizeof(g_pgvalve_info.wiredcfg_app), "PANGU_VALVE/cfg_pangu_valve");
 	MESA_load_profile_uint_def(PANGU_CONF_FILE, "SYSTEM", "HASH_TABLE_SIZE", &g_pgvalve_info.hash_size, 8388608);
 	MESA_load_profile_uint_def(PANGU_CONF_FILE, "SYSTEM", "SW_HNODE_TIMEOUT_MIN", &g_pgvalve_info.sw_invalid_timeout, 2880);
 	g_pgvalve_info.sw_invalid_timeout *= 60; //2Ìì
@@ -148,7 +149,7 @@ static int32_t read_conf_and_init(void)
 
 void wired_load_config(void)
 {
-	void *wired_handle = wired_cfg_create("PANGU_VALVE/cfg_pangu_valve", PANGU_CONF_FILE);
+	void *wired_handle = wired_cfg_create(g_pgvalve_info.wiredcfg_app, PANGU_CONF_FILE);
 	if(wired_cfg_init(wired_handle) != WCFG_RET_OK)
 	{
 		MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime, RLOG_LV_FATAL, MODULE_NAME, "wired_cfg_init %s failed.", PANGU_CONF_FILE);
