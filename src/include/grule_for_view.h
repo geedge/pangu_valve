@@ -52,7 +52,8 @@ typedef union{
 		uint16_t  vlan_flag:1;
 		uint16_t  ddir_flag:1;
 		uint16_t  hit_flag:1;	
-		uint16_t  resv:4; // resv must be zero
+		//uint16_t  resv:4; // resv must be zero   pjr modified 20181206
+		uint16_t  resv:3; // resv must be zero
 	};
 	uint16_t grule_type;
 }grule_type_t;
@@ -140,6 +141,8 @@ typedef struct{
 		mask4_rule_t    m4;
 		mask6_rule_t    m6;
 	};
+	uint8_t	dev_id;		//add by pjr 20181206
+	uint8_t reserved[3];//add by pjr 20181206
 }grule_t;
 
 

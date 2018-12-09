@@ -122,7 +122,6 @@ static int32_t read_conf_and_init(void)
 		assert(0);
 		return -1;
 	}
-	MESA_load_profile_string_def(PANGU_CONF_FILE, "SYSTEM", "CONSUL_WIREDCFG_APPNAME", g_pgvalve_info.wiredcfg_app, sizeof(g_pgvalve_info.wiredcfg_app), "PANGU_VALVE/cfg_pangu_valve");
 	MESA_load_profile_uint_def(PANGU_CONF_FILE, "SYSTEM", "HASH_TABLE_SIZE", &g_pgvalve_info.hash_size, 8388608);
 	MESA_load_profile_uint_def(PANGU_CONF_FILE, "SYSTEM", "SW_HNODE_TIMEOUT_MIN", &g_pgvalve_info.sw_invalid_timeout, 2880);
 	g_pgvalve_info.sw_invalid_timeout *= 60; //2天
@@ -143,30 +142,22 @@ static int32_t read_conf_and_init(void)
 		assert(0);
 		return -1;
 	}
+
+	//其他配置文件
+	MESA_load_profile_string_def(PANGU_CONF_FILE, "WIRED_RAW_FILE", "SERVICE_ID_MAP.conf", g_pgvalve_info.service_map, sizeof(g_pgvalve_info.service_map), SERVICE_MAP_FILE);
+	MESA_load_profile_string_def(PANGU_CONF_FILE, "WIRED_RAW_FILE", "MAAT_REDIS_INFO.conf", g_pgvalve_info.maat_info, sizeof(g_pgvalve_info.maat_info), MAAT_INFO_FILE);
+	MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime, RLOG_LV_FATAL, MODULE_NAME, "Using cfgfile: %s and %s.", g_pgvalve_info.service_map, g_pgvalve_info.maat_info);
+
 	pthread_rwlock_init(&g_pgvalve_info.rwlock, NULL);
 	return 0;
 }
 
 void wired_load_config(void)
 {
-	void *wired_handle = wired_cfg_create(g_pgvalve_info.wiredcfg_app, PANGU_CONF_FILE);
+	void *wired_handle = wired_cfg_create("PANGU_VALVE_CONF", PANGU_CONF_FILE);
 	if(wired_cfg_init(wired_handle) != WCFG_RET_OK)
 	{
 		MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime, RLOG_LV_FATAL, MODULE_NAME, "wired_cfg_init %s failed.", PANGU_CONF_FILE);
-	}
-	wired_cfg_destroy(wired_handle);
-
-	wired_handle = wired_cfg_create("PANGU_VALVE/cfg_service_id_map", SERVICE_MAP_FILE);
-	if(wired_cfg_init(wired_handle) != WCFG_RET_OK)
-	{
-		MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime, RLOG_LV_FATAL, MODULE_NAME, "wired_cfg_init %s failed.", SERVICE_MAP_FILE);
-	}
-	wired_cfg_destroy(wired_handle);
-
-	wired_handle = wired_cfg_create("PANGU_VALVE/cfg_maat_info", MAAT_INFO_FILE);
-	if(wired_cfg_init(wired_handle) != WCFG_RET_OK)
-	{
-		MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime, RLOG_LV_FATAL, MODULE_NAME, "wired_cfg_init %s failed.", SERVICE_MAP_FILE);
 	}
 	wired_cfg_destroy(wired_handle);
 }
@@ -573,7 +564,7 @@ int32_t fill_in_single_maat_instance(char *line_content, struct maat_table_relat
 
 int load_maat_info(struct maat_table_relation **maat_lists, int *num)
 {
-	LoadTableInfo<struct maat_table_relation> load_maat(MAAT_INFO_FILE, fill_in_single_maat_instance);
+	LoadTableInfo<struct maat_table_relation> load_maat(g_pgvalve_info.maat_info, fill_in_single_maat_instance);
 
 	return load_maat.load_table_info(maat_lists, num);
 }
@@ -627,7 +618,7 @@ int load_service_map_info(void)
 {
 	struct service_id_map *map_lists;
 	int ret=0, num;
-	LoadTableInfo<struct service_id_map> load_serv_map(SERVICE_MAP_FILE, fill_in_service_id_map);
+	LoadTableInfo<struct service_id_map> load_serv_map(g_pgvalve_info.service_map, fill_in_service_id_map);
 	int64_t key;
 
 	if(load_serv_map.load_table_info(&map_lists, &num) < 0)

@@ -76,6 +76,25 @@ SSCANF_ERROR_NO_t fill_in_dsetid_did_limitid(const char *user_region, int64_t *d
 	return SSCANF_OK;
 }
 
+SSCANF_ERROR_NO_t fill_in_inline_device_id(const char *user_region, u_int8_t *device_id)
+{
+	const char *pos;
+	int dev_id;
+
+	if(device_id!=NULL && NULL!=(pos = strcasestr(user_region, "Device_id=")))
+	{
+		if(sscanf(pos+strlen("Device_id="), "%d", &dev_id) != 1)
+		{
+			return SSCANF_ERROR_DID;
+		}
+		else
+		{
+			*device_id = dev_id;
+		}
+	}
+	return SSCANF_OK;
+}
+
 void one_destroy_hnode(void *data)
 {
 	free(data);
@@ -162,13 +181,13 @@ SSCANF_ERROR_NO_t fill_in_region_grule_ip(const char* table_line, one_config_hno
 			dst_ip, dst_ip_mask, dst_port, dst_port_mask,
 			&protocol, &direction, &is_valid,
 			&action, &service, user_region); 
-	if(ret != 16 && ret!=17) //user_region只有限速表有
+	if(ret != 16 && ret!=17)
 	{
 		return SSCANF_ERROR_NUM;
 	}
 	iprule->disp_status = 0;
 	iprule->grule.rule_id = region_id;
-	if(fill_in_dsetid_did_limitid(user_region, NULL, NULL, &limit_rate))
+	if(fill_in_dsetid_did_limitid(user_region, NULL, NULL, &limit_rate) || fill_in_inline_device_id(user_region, &iprule->grule.dev_id))
 		return SSCANF_ERROR_LIMIT;
 	if(service_to_c3_servtype(service, (limit_rate/10)*10, &gmap_info))
 		return SSCANF_ERROR_SERVICE;

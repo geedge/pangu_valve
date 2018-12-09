@@ -85,7 +85,10 @@ typedef struct __pgvavle_global_info
 	unsigned int http_timeout;
 	unsigned int lock_delay;
 	unsigned int session_ttl;
-	char wiredcfg_app[256]; //wirecfg
+
+	//ÅäÖÃÎÄ¼ş
+	char service_map[256];
+	char maat_info[256];
 
 	//C3
 	char authdata[128];

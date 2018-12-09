@@ -94,8 +94,10 @@ void write_grule_log(const char *table_name, grule_t &grule, int disp_status, in
 			inet_ntop(AF_INET, &grule.s4.dip, dip, 128);
 			sport = grule.s4.sport;
 			dport = grule.s4.dport;
-			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, "pz_dispatch_%s: %s, simple4, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, tuple4: %s_%d>%s_%d(%s)",
-				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", grule.rule_type, grule.srv_type, sip, ntohs(sport), dip, ntohs(dport), errcode?grule_error_str(errcode):"");
+			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, 
+				"pz_dispatch_%s: %s, simple4, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, dev_id: %d, tuple4: %s_%d>%s_%d(%s)",
+				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", 
+				grule.rule_type, grule.srv_type, grule.dev_id, sip, ntohs(sport), dip, ntohs(dport), errcode?grule_error_str(errcode):"");
 			break;
 			
 		case GRULE_BIG_TYPE_SIMPLE6:
@@ -103,8 +105,10 @@ void write_grule_log(const char *table_name, grule_t &grule, int disp_status, in
 			inet_ntop(AF_INET6, &grule.s6.dip.ip6_c, dip, 128);
 			sport = grule.s6.sport;
 			dport = grule.s6.dport;
-			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, "pz_dispatch_%s: %s, simple6, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, tuple4: %s_%d>%s_%d(%s)",
-				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", grule.rule_type, grule.srv_type, sip, ntohs(sport), dip, ntohs(dport), errcode?grule_error_str(errcode):"");
+			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, 
+				"pz_dispatch_%s: %s, simple6, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, dev_id: %d, tuple4: %s_%d>%s_%d(%s)",
+				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", 
+				grule.rule_type, grule.srv_type, grule.dev_id, sip, ntohs(sport), dip, ntohs(dport), errcode?grule_error_str(errcode):"");
 			break;
 
 		case GRULE_BIG_TYPE_MASK4:
@@ -114,8 +118,10 @@ void write_grule_log(const char *table_name, grule_t &grule, int disp_status, in
 			inet_ntop(AF_INET, &grule.m4.dip_mask, dmask, 128);
 			sport = grule.m4.sport;
 			dport = grule.m4.dport;
-			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, "pz_dispatch_%s: %s, mask4, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, tuple4: %s_%d>%s_%d, mask4: %s_%d>%s_%d(%s)",
-				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", grule.rule_type, grule.srv_type, sip, ntohs(sport), dip, ntohs(dport), smask, ntohs(grule.m4.sport_mask), dmask, ntohs(grule.m4.dport_mask), errcode?grule_error_str(errcode):"");
+			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, 
+				"pz_dispatch_%s: %s, mask4, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, dev_id: %d, tuple4: %s_%d>%s_%d, mask4: %s_%d>%s_%d(%s)",
+				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL",
+				grule.rule_type, grule.srv_type, grule.dev_id, sip, ntohs(sport), dip, ntohs(dport), smask, ntohs(grule.m4.sport_mask), dmask, ntohs(grule.m4.dport_mask), errcode?grule_error_str(errcode):"");
 			break;
 
 		case GRULE_BIG_TYPE_MASK6:
@@ -125,8 +131,10 @@ void write_grule_log(const char *table_name, grule_t &grule, int disp_status, in
 			inet_ntop(AF_INET6, &grule.m6.dip_mask.ip6_c, dmask, 128);
 			sport = grule.m6.sport;
 			dport = grule.m6.dport;
-			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, "pz_dispatch_%s: %s, mask6, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, tuple4: %s_%d>%s_%d, mask4: %s_%d>%s_%d(%s)",
-				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", grule.rule_type, grule.srv_type, sip, ntohs(sport), dip, ntohs(dport), smask, ntohs(grule.m6.sport_mask), dmask, ntohs(grule.m6.dport_mask), errcode?grule_error_str(errcode):"");
+			MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, 
+				"pz_dispatch_%s: %s, mask6, rule_id: 0x%lx-%lu, double_dir: %s, action: %s, rule_type: 0x%hx, serv_type: %d, dev_id: %d, tuple4: %s_%d>%s_%d, mask4: %s_%d>%s_%d(%s)",
+				get_disp_status_str(disp_status), table_name, grule.rule_id, grule.rule_id, grule.rule_type.ddir_flag?"yes":"no", grule.action==GRULE_ACTION_ADD?"ADD":"DEL", 
+				grule.rule_type, grule.srv_type, grule.dev_id, sip, ntohs(sport), dip, ntohs(dport), smask, ntohs(grule.m6.sport_mask), dmask, ntohs(grule.m6.dport_mask), errcode?grule_error_str(errcode):"");
 			break;
 	}
 }
