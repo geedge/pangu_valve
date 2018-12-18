@@ -274,7 +274,6 @@ SSCANF_ERROR_NO_t fill_in_region_grule_ip(const char* table_line, one_config_hno
 			iprule->grule.rule_type.pmsk_flag = ((iprule->grule.rule_type.sipmsk_flag||iprule->grule.rule_type.dipmsk_flag) && protocol!=0)?1:0;
 			break;
 		default: 
-			assert(0);
 			return SSCANF_ERROR_PROTOCOL;
 	}
 
@@ -385,7 +384,7 @@ void one_maat_update_callback(int32_t table_id, const char* table_line, void* u_
 			code = fill_in_region_grule_pool(table_line, &priv.iprule);
 			break;
 		default: 
-			assert(0);return;
+			return;
 	}
 	if(code!=SSCANF_OK || (check=_wrap_grule_check(&priv.iprule.grule)))
 	{
@@ -848,7 +847,7 @@ void onesw_maat_update_callback(int32_t table_id,const char* table_line,void* u_
 	hash_key.service_id = maat_data->table->service_id;
 	hash_key.table_id	= maat_data->table->table_id_key;
 	hash_key.dsetid 	= dsetid;
-	hash_key.did		= (maat_data->table->parent->parent!=NULL)?did:0;
+	hash_key.did		= did;
 
 	pthread_rwlock_rdlock(&g_pgvalve_info.rwlock);
  	MESA_htable_search_cb(maat_data->table->hash_handle, (unsigned char *)&hash_key, sizeof(table_hash_key_t), onesw_deal_config_incr_cb, (void*)&priv, &cb_ret);
@@ -1063,6 +1062,7 @@ void two_maat_update_callback(int32_t table_id,const char* table_line,void* u_pa
 		MESA_HANDLE_RUNTIME_LOGV2(g_pgvalve_info.log_runtime,RLOG_LV_INFO, MODULE_NAME, "pz_error: table %s invalid line: %s", maat_data->table->table_name, table_line);
 		return ;
 	}
+	//单纯的二级表(无父表)校验业务号
 	if(maat_data->table->parent==NULL && service_to_c3_servtype(service, (limit_rate/10)*10, &priv.gmap_info))
 	{
 		pz_trans_statistic_count(maat_data->table->service_id, maat_data->table->table_id_key, 1, STAT_FIELD_RERROR);

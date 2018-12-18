@@ -100,7 +100,7 @@ int MaatService::store_latest_version(long long ver)
 int MaatService::maat_feather_start(void)
 {	
 	char tmp_buffer[1024];
-	int ret;
+	int ret, scan_interval_ms=10;
 
 	feather = Maat_feather(1, g_pgvalve_info.maat_table_info, g_pgvalve_info.log_runtime);
 	if(feather == NULL)
@@ -112,6 +112,7 @@ int MaatService::maat_feather_start(void)
 	ret = Maat_set_feather_opt(feather, MAAT_OPT_STAT_FILE_PATH, tmp_buffer, strlen(tmp_buffer)+1);
 	ret |= Maat_set_feather_opt(feather, MAAT_OPT_STAT_ON, NULL, 0);
 	ret |= Maat_set_feather_opt(feather, MAAT_OPT_PERF_ON, NULL, 0);
+	ret |= Maat_set_feather_opt(feather, MAAT_OPT_SCANDIR_INTERVAL_MS, &scan_interval_ms, sizeof(scan_interval_ms));
 
 	ret |= Maat_set_feather_opt(feather, MAAT_OPT_INSTANCE_NAME, table_relate->instance_name, strlen(table_relate->instance_name)+1);
 	if(strlen(g_pgvalve_info.effective_range)>0)
